@@ -47,3 +47,4 @@ async def get_id(id: int):
     data = get_info(id)
     return {"data": data}
 
+#hi
