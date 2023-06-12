@@ -10,15 +10,8 @@ custom_headers = {
 
 
 def get_info(isbn):
-    import requests
-from bs4 import BeautifulSoup
-custom_headers = {
-    'user-agent':  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-    'Accept-Language': 'en-US,en;q=0.9'
-}
-def get_info(isbn):
     # Making a GET request
-    r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
+    r = requests.get('https://www.amazon.com/dp/1506264107/'+isbn, headers= custom_headers)
     
     # check status code for response received
     # success code - 200
