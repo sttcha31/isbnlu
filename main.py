@@ -13,7 +13,7 @@ def get_info(isbn):
     # Making a GET request
     r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
     if r.status_code != 200:
-        return "failed"
+        return r
     # check status code for response received
     # success code - 200
     # print(r)
