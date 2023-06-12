@@ -10,8 +10,8 @@ custom_headers = {
 
 
 def get_info(isbn):
-    # Making a GET request
-    r = requests.get('https://www.amazon.com/dp/1506264107/'+isbn, headers= custom_headers)
+       # Making a GET request
+    r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
     
     # check status code for response received
     # success code - 200
@@ -26,12 +26,14 @@ def get_info(isbn):
     # print(r)
     soup = BeautifulSoup(r.content, 'html.parser')
     output['price'] = float(soup.find('span', attrs={'class':'a-offscreen'}).contents[0][1:])
+
     output['title'] = soup.find('span', attrs={'id':'productTitle'}).contents[0][2:]
     date_element = soup.findChildren('div', attrs={'id':"rpi-attribute-book_details-publication_date"})[0]
     output['year-of-publication'] = int(date_element.find('div', attrs={'class': 'a-section a-spacing-none a-text-center rpi-attribute-value'}).span.text[-4:])
     desc_element=soup.findChildren('div', attrs={'data-a-expander-name':"book_description_expander"})[0]
     output['product-description'] = (list(desc_element)[1].span.text)
     return(output)
+
 
 
 
