@@ -18,7 +18,7 @@ custom_headers = {
 }
 def get_info(isbn):
     # Making a GET request
-    r = requests.get('https://www.amazon.com/dp/1506264107/'+isbn, headers= custom_headers)
+    r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
     
     # check status code for response received
     # success code - 200
@@ -40,7 +40,7 @@ def get_info(isbn):
     output['product-description'] = (list(desc_element)[1].span.text)
     return(output)
 
-print(get_info("1438002718"))
+
 
 @app.get("/")
 async def root():
