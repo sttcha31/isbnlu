@@ -19,9 +19,9 @@ def get_info(isbn):
     # print(r)
     output = {
         'title' : " ",
-        'year-of-publication': "",
+        'edition': "",
         'price': "",
-        'product-description': ""
+        'description': ""
     }
 
     # print(r)
@@ -32,9 +32,9 @@ def get_info(isbn):
         output['price'] = 2 * float(soup.find('span', attrs={'class':'a-size-base a-color-price offer-price a-text-normal'}).contents[0][1:])
     output['title'] = soup.find('span', attrs={'id':'productTitle'}).contents[0][2:]
     date_element = soup.findChildren('div', attrs={'id':"rpi-attribute-book_details-publication_date"})[0]
-    output['year-of-publication'] = int(date_element.find('div', attrs={'class': 'a-section a-spacing-none a-text-center rpi-attribute-value'}).span.text[-4:])
+    output['edition'] = int(date_element.find('div', attrs={'class': 'a-section a-spacing-none a-text-center rpi-attribute-value'}).span.text[-4:])
     desc_element=soup.findChildren('div', attrs={'data-a-expander-name':"book_description_expander"})[0]
-    output['product-description'] = (list(desc_element)[1].span.text)
+    output['description'] = (list(desc_element)[1].span.text)
     return(output)
 
 
