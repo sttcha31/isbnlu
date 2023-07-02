@@ -1,22 +1,29 @@
 from fastapi import FastAPI 
 import requests
 from bs4 import BeautifulSoup
-
+import random
 app = FastAPI()
-custom_headers = {
-    'user-agent':  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
-    'Accept-Language': 'en-US,en;q=0.9'
-}
 
+user_agent_list = [ 
+	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36', 
+	'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36', 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+	'Mozilla/5.0 (Macintosh; Intel Mac OS X 13_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15', 
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+
+]
 
 def get_info(isbn):
     # Making a GET request
+    custom_headers = {
+            'user-agent':  random.choice(user_agent_list),
+            'Accept-Language': 'en-US,en;q=0.9'
+    }
     r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
-    if r.status_code != 200:
-        return r
-    # check status code for response received
-    # success code - 200
-    # print(r)
+    soup = BeautifulSoup(r.content, 'html.parser')
     output = {
         'title' : " ",
         'edition': "",
@@ -24,8 +31,18 @@ def get_info(isbn):
         'description': ""
     }
 
-    # print(r)
-    soup = BeautifulSoup(r.content, 'html.parser')
+    count = 0
+    while soup.find('span', attrs={'id':'productTitle'}) == None:
+        custom_headers = {
+            'user-agent':  random.choice(user_agent_list),
+            'Accept-Language': 'en-US,en;q=0.9'
+        }
+        r = requests.get('https://www.amazon.com/dp/'+isbn, headers= custom_headers)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        count+=1
+        print(count)
+    if r.status_code != 200:
+        return r
     try:
         output['price'] = float(soup.find('span', attrs={'class':'a-offscreen'}).contents[0][1:])
     except:
