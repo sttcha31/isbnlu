@@ -2,7 +2,9 @@ from fastapi import FastAPI
 import requests
 from bs4 import BeautifulSoup
 import random
+import time
 app = FastAPI()
+
 
 user_agent_list = [ 
 	'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36', 
@@ -32,6 +34,7 @@ def get_info(isbn):
     }
 
     count = 0
+    timeout = time.time() + 20 
     while soup.find('span', attrs={'id':'productTitle'}) == None:
         custom_headers = {
             'user-agent':  random.choice(user_agent_list),
@@ -41,6 +44,11 @@ def get_info(isbn):
         soup = BeautifulSoup(r.content, 'html.parser')
         count+=1
         print(count)
+        if time.time() > timeout:
+            break
+        if r.status_code != 200:
+            break
+        time.sleep(0.1)
     if r.status_code != 200:
         return r
     try:
