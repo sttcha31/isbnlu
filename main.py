@@ -49,8 +49,6 @@ def get_info(isbn):
         if r.status_code != 200:
             break
         time.sleep(0.1)
-    if r.status_code != 200:
-        return r
     try:
         output['price'] = float(soup.find('span', attrs={'class':'a-offscreen'}).contents[0][1:])
     except:
