@@ -3,6 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import random
 import time
+import sys
 app = FastAPI()
 
 
@@ -44,9 +45,12 @@ def get_info(isbn):
         soup = BeautifulSoup(r.content, 'html.parser')
         count+=1
         print(count)
+        sys.stdout.flush()
         if time.time() > timeout:
             break
         if r.status_code != 200:
+            print(r)
+            sys.stdout.flush()
             break
         time.sleep(0.1)
     try:
