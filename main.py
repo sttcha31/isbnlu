@@ -48,9 +48,7 @@ def get_info(isbn):
         sys.stdout.flush()
         if time.time() > timeout:
             break
-        if r.status_code != 200:
-            print(r)
-            sys.stdout.flush()
+        if r.status_code == 404:
             break
         time.sleep(0.1)
     try:
