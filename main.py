@@ -18,6 +18,12 @@ user_agent_list = [
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
 
 ]
+def stringToPrice(string):
+    output=[]
+    for index in range(len(string)):
+        if string[index] in "1234567890.":
+            output.append(string[index])
+    return ''.join(str(x) for x in output)
 
 def get_info(isbn):
     # Making a GET request
@@ -54,7 +60,7 @@ def get_info(isbn):
     try:
         output['price'] = float(soup.find('span', attrs={'class':'a-price a-text-price'}).findChildren()[0].text[1:])
     except:
-        output['price'] = 1.5 * float(soup.find('span', attrs={'class':'a-size-base a-color-price offer-price a-text-normal'}).contents[0][1:])
+        output['price'] = round(1.5 * float(stringToPrice(soup.find('div', attrs={'class':'a-section a-spacing-none aok-align-center aok-relative'}).findChildren()[0].text)), 2)
     output['title'] = soup.find('span', attrs={'id':'productTitle'}).contents[0][2:]
     date_element = soup.findChildren('div', attrs={'id':"rpi-attribute-book_details-publication_date"})[0]
     output['edition'] = int(date_element.find('div', attrs={'class': 'a-section a-spacing-none a-text-center rpi-attribute-value'}).span.text[-4:])
@@ -62,6 +68,8 @@ def get_info(isbn):
     output['description'] = (list(desc_element)[1].span.text)
     return(output)
 
+print(get_info("0452264553"))
+# print(stringToPrice("   $7.74  "))
 @app.get("/")
 async def root():
     return {"message": "hello im steve"}
