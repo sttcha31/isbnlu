@@ -52,7 +52,7 @@ def get_info(isbn):
             break
         time.sleep(0.1)
     try:
-        output['price'] = float(soup.find('span', attrs={'class':'a-offscreen'}).contents[0][1:])
+        output['price'] = float(soup.find('span', attrs={'class':'a-price a-text-price'}).findChildren()[0].text[1:])
     except:
         output['price'] = 1.5 * float(soup.find('span', attrs={'class':'a-size-base a-color-price offer-price a-text-normal'}).contents[0][1:])
     output['title'] = soup.find('span', attrs={'id':'productTitle'}).contents[0][2:]
@@ -61,8 +61,6 @@ def get_info(isbn):
     desc_element=soup.findChildren('div', attrs={'data-a-expander-name':"book_description_expander"})[0]
     output['description'] = (list(desc_element)[1].span.text)
     return(output)
-
-
 
 @app.get("/")
 async def root():
